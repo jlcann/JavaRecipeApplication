@@ -37,7 +37,7 @@ public class FirebaseController {
 	@SuppressWarnings("deprecation")
 	
 	public Firestore getDatabase() throws IOException {
-		InputStream serviceAccount = new FileInputStream("./serviceAccount.json");
+		InputStream serviceAccount = new FileInputStream("C:/Users/Jack/git/serviceAccount.json");
 		GoogleCredentials credentials = GoogleCredentials.fromStream(serviceAccount);
 		FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(credentials).build();
 		FirebaseApp.initializeApp(options);
@@ -81,7 +81,7 @@ public class FirebaseController {
 		
 	}
 	
-	public String getMealIngredients(String name) throws InterruptedException, ExecutionException, IOException {
+	public String getMealMethod(String name) throws InterruptedException, ExecutionException, IOException {
 		
 		String returnVal = "";
 		
@@ -90,9 +90,27 @@ public class FirebaseController {
 		List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
 		for (QueryDocumentSnapshot document : documents) {
 			if (document.getString("Name").equalsIgnoreCase(name)) {
-				 returnVal = document.getString("Ingredients");
+				 returnVal = document.getString("Method");
 			}
 		}
+		return returnVal;
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public HashMap<String, String> getMealIngredients(String name) throws InterruptedException, ExecutionException, IOException {
+		
+		HashMap<String, String> returnVal = null;
+		
+		ApiFuture<QuerySnapshot> query = this.database.collection("recipes").get();
+		QuerySnapshot querySnapshot = query.get();
+		List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
+		for (QueryDocumentSnapshot document : documents) {
+			if (document.getString("Name").equalsIgnoreCase(name)) {
+				 returnVal = (HashMap<String, String>) document.get("Ingredients");			 
+			}
+		}
+		
 		return returnVal;
 		
 	}
@@ -145,6 +163,7 @@ public class FirebaseController {
 			docData.put("Type", newMeal.getMealType());
 			docData.put("Description", newMeal.getMealDescription());
 			docData.put("Ingredients", newMeal.getIngredients());
+			docData.put("Method", newMeal.getMethod());
 			docData.put("Timestamp", LocalDate.now().toString());
 			
 			ApiFuture<WriteResult> future = this.database.collection("recipes").document(newMeal.getMealName()).set(docData);

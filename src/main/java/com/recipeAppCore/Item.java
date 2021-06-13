@@ -22,18 +22,27 @@ public abstract class Item {
 	private HashMap<String, String> Ingredients = new HashMap<String, String>();
 	private String imagePath;
 	private String timestamp;
+	private String method;
 	
 	public Item(){
 		LocalDate obj = LocalDate.now();
 		this.timestamp = obj.toString();
 		
 	}
+	
+	public String getMethod() {
+		return this.method;
+	}
+	
+	public void setMethod(String newMethod) {
+		this.method = newMethod;
+	}
 
 	public String getTimestamp() {
 		return this.timestamp;
 		
 	}
-	public void SetMealName(String name) {
+	public void setMealName(String name) {
 		this.MealName = name;
 	}
 	
@@ -41,7 +50,7 @@ public abstract class Item {
 		return this.MealName;
 	}
 	
-	public void SetMealType(String type) {
+	public void setMealType(String type) {
 		this.MealType = type;
 	}
 	
@@ -53,7 +62,7 @@ public abstract class Item {
 		return this.Ingredients;
 	}
 	
-	public void SetMealDescription(String description) {
+	public void setMealDescription(String description) {
 		this.MealDescription = description;
 	}
 	
@@ -61,18 +70,17 @@ public abstract class Item {
 		return this.MealDescription;
 	}
 	
-	public void MealInfo() {
+	public void mealInfo() {
 		System.out.println(MessageFormat.format("{0} \n{1} \n{2}\n{3} \n", MealName, MealType, MealDescription, timestamp));
-		printIngredients();
 	}
 	
 	public void addIngredient(String ingredient, String measure) {
 		this.Ingredients.put(ingredient, measure);
 	}
 	
-	public void printIngredients() {
-		for (Map.Entry<String, String> ingredients : this.Ingredients.entrySet()) {
-			System.out.println(MessageFormat.format("{0} - {1}", ingredients.getKey(), ingredients.getValue()));
+	public void printIngredients(HashMap<String, String> ingredients) {
+		for (Map.Entry<String, String> ingredient : ingredients.entrySet()) {
+			System.out.println(MessageFormat.format("{0} - {1}", ingredient.getKey(), ingredient.getValue()));
 		}
 	}
 	
