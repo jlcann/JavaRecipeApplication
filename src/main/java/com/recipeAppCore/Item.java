@@ -49,6 +49,10 @@ public abstract class Item {
 		return this.MealType;
 	}
 	
+	public HashMap<String, String> getIngredients(){
+		return this.Ingredients;
+	}
+	
 	public void SetMealDescription(String description) {
 		this.MealDescription = description;
 	}
